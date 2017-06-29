@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<arg name="ns"		value="/maris" />
+	<!--<arg name="path" value="/media/d/dataset_rapallo_maris/images-13-40/" />-->
+	<!--<arg name="path" value="/home/dario/workspace/nonros-rimlab/cvPipeDetection/portofino/" />-->
+	<arg name="path" value="/media/d/maris_march/image/last_60-67/2015-03-27-11-12-42_66/" />
+	<arg name="ros"	default="false" />
+	<arg name="stereo" default="false" />
+	
+	<node unless="$(arg ros)" name="stereo_reader_node" pkg="maris_pipe_pose_estimation" type="stereo_reader_node" output="screen" >
+		<param name="namespace" value="$(arg ns)" />
+		<param name="path" value="$(arg path)" />
+		<param name="format_name" type="string" value="frame%05d"/>
+		<param name="file_extension" type="string" value="png"/>
+		<param name="freq" value="1" />
+		<param name="index" value="70" />
+		<param name="mask" value="false" />
+		<param name="beg_index" value="0" />
+		<param name="end_index" value="100" /> <!--895-->
+	</node>
+	
+	<node name="left_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/left" />
+	<node name="right_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/right" />
+	
+	
+	<!--	Required topics:
+		$(arg ns)/left/image_rect_color
+		$(arg ns)/left/camera_info
+		$(arg ns)/right/image_rect_color
+		$(arg ns)/right/camera_info -->
+	<node name="PipePoseEstimationNode" pkg="maris_pipe_pose_estimation" type="PipePoseEstimationNode" output="screen">
+		<param name="namespace" type="string" value="$(arg ns)" />
+		<param name="wTv" type="str" value="/vehicle/wTv" />
+		<param name="width" type="int" value="1292" />
+		<param name="height" type="int" value="964" />
+		<param name="downsampling" type="int" value="2" />
+		<param name="downsampling_output" type="int" value="2" />
+	</node>
+	
+	<node if="$(arg stereo)" name="maris_stereo_proc_node" pkg="maris_pipe_pose_estimation" type="stereo_proc_node" output="screen">
+	
+		<param name="leftImageRawTopic" value="$(arg ns)/left/image_raw" />
+		<param name="leftCameraInfoTopic" value="$(arg ns)/left/camera_info" />
+		<param name="rightImageRawTopic" value="$(arg ns)/right/image_raw" />
+		<param name="rightCameraInfoTopic" value="$(arg ns)/right/camera_info" />
+		<param name="point2Topic" value="$(arg ns)/points2" />
+		<param name="downsampling" value="2" />
+		<param name="disparityTopic" value="$(arg ns)/disparity" />
+		<param name="fixedFrameTopic" value="$(arg ns)" />
+        		
+		<param name="prefilter_size" 			value="9" />
+		<param name="prefilter_cap" 			value="31" />
+		<param name="correlation_window_size" 		value="15" />
+		<param name="min_disparity" 			value="0" />
+		<param name="disparity_range" 			value="128" />
+		<param name="uniqueness_ratio" 			value="15" />
+		<param name="texture_threshold" 		value="10" />
+		<param name="speckle_size" 			value="100" />
+		<param name="speckle_range" 			value="4" />
+	</node>
+	
+</launch>

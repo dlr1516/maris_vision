@@ -1,0 +1,24 @@
+/**
+ * MARIS Vision - ROS Packages of Vision System used in MARIS project. 
+ * Copyright (C) 2016 Fabjan Kallasi and Dario Lodi Rizzini.
+ *
+ * This file is part of MARIS Vision. 
+ * Visit http://rimlab.ce.unipr.it/Maris.php for more information about 
+ * the project. 
+ *
+ * MARIS Vision is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MARIS Vision is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with MARIS Vision.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include <maris_pipe_pose_estimation/Profiler.h>
+
+Profiler g_prof;

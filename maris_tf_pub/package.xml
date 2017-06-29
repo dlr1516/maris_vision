@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package>
+  <name>maris_tf_pub</name>
+  <version>0.0.0</version>
+  <description>The maris_tf_pub package</description>
+
+  <maintainer email="dario.lodirizzini@unipr.it">Dario Lodi Rizzini</maintainer>
+
+  <license>LGPL</license>
+   <url type="website">http://rimlab.ce.unipr.it/Maris.php</url> 
+
+   <author email="kallasi@ce.unipr.it">Fabjan Kallasi</author> 
+   <author email="dario.lodirizzini@gmail.com">Dario Lodi Rizzini</author>
+   <author email="oleari@ce.unipr.it">Fabio Oleari</author> 
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>message_filters</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>maris_ros_msgs</build_depend>
+
+  <build_depend>actionlib_msgs</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>message_filters</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>maris_ros_msgs</run_depend>
+
+  <export>
+  </export>
+</package>

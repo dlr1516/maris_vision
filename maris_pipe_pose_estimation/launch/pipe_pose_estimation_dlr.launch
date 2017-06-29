@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<arg name="ns"		value="/vision" />
+	<!--<arg name="path" value="/media/d/dataset_rapallo_maris/images-13-40/" />-->
+<!--	<arg name="path" value="/media/Elements/data/MARIS/dataset_Portofino2014/images-13-30/" />-->
+	<!--<arg name="path" value="/media/fab/Fab WD500/dataset_rapallo_maris/images-13-40/" />-->
+<!--	<arg name="path" value="/media/Elements/data/MARIS/genova_2015_march/fabjan_seq_3/export_56-17_9/piscina_genova_seq_3_2/" />-->
+	<arg name="path" value="/media/Elements/data/MARIS/genova_2015_march/fabjan_seq_3/export_56-17_9/piscina_genova_seq_3_2/" />
+	<arg name="ros"	default="false" />
+	<arg name="stereo" default="true" />
+	
+	<node unless="$(arg ros)" name="stereo_reader_node" pkg="maris_pipe_pose_estimation" type="stereo_reader_node" output="screen" >
+		<param name="namespace" value="$(arg ns)" />
+		<param name="path" value="$(arg path)" />
+		<param name="format_name" type="string" value="frame%05d"/>
+		<param name="file_extension" type="string" value="png"/>
+		<param name="freq" value="5" />
+		<param name="index" value="-1" />
+		<param name="mask" value="false" />
+		<param name="beg_index" value="0" />
+		<param name="end_index" value="100" /> <!--895-->
+	</node>
+	
+	<node name="left_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/left" />
+	<node name="right_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/right" />
+	
+	
+	<!--	Required topics:
+		$(arg ns)/left/image_rect_color
+		$(arg ns)/left/camera_info
+		$(arg ns)/right/image_rect_color
+		$(arg ns)/right/camera_info -->
+	<node name="PipePoseEstimationNode" pkg="maris_pipe_pose_estimation" type="PipePoseEstimationNode" output="screen">
+		<param name="namespace" type="string" value="$(arg ns)" />
+		<param name="wTv" type="str" value="/vehicle/wTv" />
+		<param name="width" type="int" value="1292" />
+		<param name="height" type="int" value="964" />
+		<param name="downsampling" type="int" value="2" />
+		<param name="downsampling_output" type="int" value="2" />
+
+		<param name="Color" type="int" value="0" />
+		<param name="maskThreshold" type="int" value="50" />
+		<param name="blurStandarDev" type="int" value="9" />
+		<param name="blurSize" type="int" value="31" />
+		<param name="minMaskSize" type="int" value="5000" />
+		<param name="angleDistBreak" type="int" value="2" />
+		<param name="angleDistThreshold" type="int" value="10" />
+		<param name="edgeAngleDetectorThreshold" type="int" value="50" />
+		<param name="edgeMapThreshold" type="int" value="40" />
+		<param name="terminalHistThreshold" type="int" value="40" />
+		<param name="edgeHistogramDeviation" type="int" value="3" />
+		<param name="pipeRadius" type="double" value="0.05" />
+		<param name="pipeLenght" type="double" value="1" />
+		<param name="alphaFilter" type="double" value="0.5" />
+		<param name="betaFilter" type="double" value="0.1" />
+	</node>
+	
+	<node if="$(arg stereo)" name="maris_stereo_proc_node" pkg="maris_pipe_pose_estimation" type="stereo_proc_node">
+		<param name="leftImageRawTopic" value="$(arg ns)/left/image_raw" />
+		<param name="leftCameraInfoTopic" value="$(arg ns)/left/camera_info" />
+		<param name="rightImageRawTopic" value="$(arg ns)/right/image_raw" />
+		<param name="rightCameraInfoTopic" value="$(arg ns)/right/camera_info" />
+		<param name="point2Topic" value="$(arg ns)/points2" />
+		<param name="downsampling" value="2" />
+		<param name="disparityTopic" value="$(arg ns)/disparity" />
+		<param name="fixedFrameTopic" value="$(arg ns)" />
+        		
+		<param name="prefilter_size" 			value="9" />
+		<param name="prefilter_cap" 			value="31" />
+		<param name="correlation_window_size" 		value="15" />
+		<param name="min_disparity" 			value="0" />
+		<param name="disparity_range" 			value="128" />
+		<param name="uniqueness_ratio" 			value="15" />
+		<param name="texture_threshold" 		value="10" />
+		<param name="speckle_size" 			value="100" />
+		<param name="speckle_range" 			value="4" />
+	</node>
+
+	<node name="frame_tracker" pkg="maris_pipe_pose_estimation" type="frame_tracker_node" output="screen">
+		<param name="worldToObserverTopic" type="string" value="/vehicle/wTc" />
+		<param name="observerToTargetInTopic" type="string" value="/freefloating/vTg" />
+		<param name="observerToTargetLineInTopic" type="string" value="/vision/vLg" />
+		<param name="observerToTargetOutTopic" type="string" value="/vision/vTo_corr" />
+<!--		<param name="altitudeTopic" type="string" value="/vehicle/altitude" />-->
+		<param name="updateRate" type="double" value="0.6" />
+		<param name="rangeOn" type="bool" value="false" />
+		<param name="rangeMin" type="double" value="0.5" />
+		<param name="rangeMax" type="double" value="4.0" />
+		<param name="positionOn" type="bool" value="false" />
+		<param name="positionToll" type="double" value="1.5" />
+		<param name="orientationOn" type="bool" value="false" />
+		<param name="orientationTollDeg" type="double" value="20.0" />
+		<param name="observerZOn" type="bool" value="false" />
+		<param name="markerRadius" type="double" value="0.04" />
+		<param name="markerLength" type="double" value="1.00" />
+		<param name="frameId" type="string" value="/vehicle" />
+	</node>
+      <node pkg="tf" type="static_transform_publisher" name="vTc" args="0.27246 -0.07184 1.10210 -0.10275321443397736 -0.10894827136369063 0.6776989463503262 0.7199288159255748 /vehicle /vision 100" output="screen" />  
+	
+</launch>

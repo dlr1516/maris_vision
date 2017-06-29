@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!--<env name="ROS_HOSTNAME" value="192.168.0.36" />-->
+	  
+    <param name="use_sim_time" value="true" />
+
+    <arg name="ns"		value="/vision" />
+    <!--<arg name="path" value="/media/d/dataset_rapallo_maris/images-13-30/" />-->
+    <!--<arg name="path" value="/media/fab/Fab WD500/dataset_rapallo_maris/images-13-40/" />-->
+    <!--<arg name="path" value="/media/d/maris_march/image/last_60-67/2015-03-27-11-12-42_66/" />-->
+    <!--<arg name="path" value="/media/d/maris_march/image/2015-03-24_pipe_seq_01/2015-03-24-16-48-32_4/" />-->
+    <arg name="path" value="/media/d/maris_march/image/test_record_all_2/2015-03-26-14-14-41_1/" />
+    <!--<arg name="path" value="/media/d/maris_march/image/fabjan_seq_2/2015-03-25-16-34-42_1/" />-->
+    <arg name="ros"	default="false" />
+    <arg name="stereo" default="true" />
+    <arg name="tracking" default="true" />
+    <arg name="arm_rep" default="true" />
+	
+    <node unless="$(arg ros)" name="stereo_reader_node" pkg="maris_pipe_pose_estimation" type="stereo_reader_node" output="screen">
+        <param name="namespace" value="$(arg ns)" />
+        <param name="path" value="$(arg path)" />
+        <param name="format_name" type="string" value="frame%05d"/>
+        <param name="file_extension" type="string" value="png"/>
+        <param name="freq" value="2" />
+        <param name="index" value="-1" />
+        <param name="mask" value="false" />
+        <param name="beg_index" value="100" />
+        <param name="end_index" value="150" /> <!--895-->
+    </node>
+	
+    <node name="left_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/left" />
+    <node name="right_image_proc" pkg="image_proc" type="image_proc" ns="$(arg ns)/right" />
+	
+	
+    <!--	Required topics:
+    $(arg ns)/left/image_rect_color
+    $(arg ns)/left/camera_info
+    $(arg ns)/right/image_rect_color
+    $(arg ns)/right/camera_info -->
+    <include file="$(find maris_pipe_pose_estimation)/launch/pipe_colors/yellow_albaro.launch" />
+    <node name="PipePoseEstimationNode" pkg="maris_pipe_pose_estimation" type="PipePoseEstimationNode" output="screen">
+        <param name="namespace" type="string" value="$(arg ns)" />
+        <param name="wTv" type="str" value="/vehicle/wTv" />
+        <!--<param name="vTcTransf" type="str" value="0.05770 0.99818 0.01760 0.00000 -0.95340 0.06034 -0.29562 0.00000 -0.29614 0.00028 0.95515 0.00000 0.27246 -0.07184 0.90210 1.00000" />-->
+        <param name="vTcTransf" type="str" value="0.05770 0.99818 0.01760 0.00000 -0.95340 0.06034 -0.29562 0.00000 -0.29614 0.00028 0.95515 0.00000 0.27246 -0.07184 1.10210 1.00000" />
+        <param name="oTlTransf" type="str" value="1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0" />
+        <param name="oTgTransf" type="str" value="0.86603 0.0 0.5 0.0 0.0 1.0 0.0 0.0 -0.5 0.0 0.86603 0.0 0.0 0.0 0.0 1.0" />
+        <param name="width" type="int" value="1292" />
+        <param name="height" type="int" value="964" />
+        <param name="downsampling" type="int" value="2" />
+        <param name="downsampling_output" type="int" value="1" />
+		
+        <param name="use_arm_reprojection" type="bool" value="$(arg arm_rep)" />
+		
+        <param name="colorCorrection" type="bool" value="false" />
+        <param name="maskThreshold" type="int" value="25" />
+        <param name="blurStandarDev" type="int" value="50" />
+        <param name="blurSize" type="int" value="31" />
+        <param name="minMaskSize" type="int" value="500" />
+        <param name="angleDistBreak" type="int" value="2" />
+        <param name="angleDistThreshold" type="int" value="10" />
+        <param name="edgeAngleDetectorThreshold" type="int" value="50" />
+        <param name="edgeMapThreshold" type="int" value="60" />
+        <param name="terminalHistThreshold" type="int" value="60" />
+        <param name="edgeHistogramDeviation" type="int" value="3" />
+        <param name="pipeRadius" type="double" value="0.04" />
+        <param name="pipeLenght" type="double" value="1" />
+        <param name="alphaFilter" type="double" value="0.5" />
+        <param name="betaFilter" type="double" value="0.1" />
+        <param name="rhoThFilter" type="double" value="100" />
+        <param name="thetaThFilter" type="double" value="10" />
+    </node>
+	
+    <node if="$(arg arm_rep)" name="ArmReprojectorNode" pkg="maris_pipe_pose_estimation" type="ArmReprojectorNode" output="screen">
+        <param name="namespace" type="string" value="$(arg ns)" />
+        <param name="vTc" type="str" value="/vision/vTc" />
+        <param name="vTb" type="str" value="/arm/vTb" />
+        <param name="bT1" type="str" value="/arm/bT1" />
+        <param name="bT2" type="str" value="/arm/bT2" />
+        <param name="bT3" type="str" value="/arm/bT3" />
+        <param name="bT4" type="str" value="/arm/bT4" />
+        <param name="bT5" type="str" value="/arm/bT5" />
+        <param name="bT6" type="str" value="/arm/bT6" />
+        <param name="bT7" type="str" value="/arm/bT7" />
+        <param name="output" type="bool" value="false" />
+        <param name="width" type="int" value="1292" />
+        <param name="height" type="int" value="964" />
+        <param name="downsampling" type="int" value="1" />
+        <!--<param name="transf" type="str" value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1" />-->
+        <param name="transf" type="str" value="1 0 0 0 0 1 0 0 0 0 1 0 -0.04 0 0.20 1" />
+        <param name="arm_points" type="str" value="$(find maris_pipe_pose_estimation)/arm/arm_points.txt" />
+    </node>
+	
+    <node if="$(arg stereo)" name="maris_stereo_proc_node" pkg="maris_pipe_pose_estimation" type="stereo_proc_node" output="screen">
+	
+        <param name="leftImageRawTopic" value="$(arg ns)/left/image_raw" />
+        <param name="leftCameraInfoTopic" value="$(arg ns)/left/camera_info" />
+        <param name="rightImageRawTopic" value="$(arg ns)/right/image_raw" />
+        <param name="rightCameraInfoTopic" value="$(arg ns)/right/camera_info" />
+        <param name="point2Topic" value="$(arg ns)/points2" />
+        <param name="downsampling" value="2" />
+        <param name="disparityTopic" value="$(arg ns)/disparity" />
+        <param name="fixedFrameTopic" value="$(arg ns)" />
+        		
+        <param name="prefilter_size" 			value="9" />
+        <param name="prefilter_cap" 			value="31" />
+        <param name="correlation_window_size" 		value="15" />
+        <param name="min_disparity" 			value="0" />
+        <param name="disparity_range" 			value="128" />
+        <param name="uniqueness_ratio" 			value="15" />
+        <param name="texture_threshold" 		value="10" />
+        <param name="speckle_size" 			value="100" />
+        <param name="speckle_range" 			value="4" />
+    </node>
+
+    <node if="$(arg tracking)" name="frame_tracker_vTg" pkg="maris_pipe_pose_estimation" type="frame_tracker_node" output="screen">
+        <param name="worldToObserverTopic" type="string" value="/vehicle/wTc" />
+        <param name="observerToTargetInTopic" type="string" value="/vision/vTgRaw" />
+        <param name="observerToTargetLineInTopic" type="string" value="/vision/vLg" />
+        <param name="observerToTargetOutTopic" type="string" value="/freefloating/vTg" />
+        <param name="markerOutTopic" type="string" value="/vision/vTgMarkerPipe" />
+        <param name="poseOutTopic" type="string" value="/vision/vTgMarkerPose" />
+        <!--		<param name="altitudeTopic" type="string" value="/vehicle/altitude" />-->
+        <param name="updateRate" type="double" value="0.6" />
+        <param name="rangeOn" type="bool" value="false" />
+        <param name="rangeMin" type="double" value="0.5" />
+        <param name="rangeMax" type="double" value="4.0" />
+        <param name="positionOn" type="bool" value="false" />
+        <param name="positionToll" type="double" value="1.0" />
+        <param name="orientationOn" type="bool" value="false" />
+        <param name="orientationTollDeg" type="double" value="20.0" />
+        <param name="observerZOn" type="bool" value="false" />
+        <param name="markerRadius" type="double" value="0.05" />
+        <param name="markerLength" type="double" value="1.00" />
+        <param name="frameId" type="string" value="/freefloating" />
+    </node>
+        
+    <node if="$(arg tracking)" name="frame_tracker_cTo" pkg="maris_pipe_pose_estimation" type="frame_tracker_node" output="screen">
+        <param name="worldToObserverTopic" type="string" value="/vehicle/wTc" />
+        <param name="observerToTargetInTopic" type="string" value="/vision/cTlRaw" />
+        <param name="observerToTargetLineInTopic" type="string" value="/vision/cLl" />
+        <param name="observerToTargetOutTopic" type="string" value="/vision/cTl" />
+        <param name="markerOutTopic" type="string" value="/vision/cTlMarkerPipe" />
+        <param name="poseOutTopic" type="string" value="/vision/cTlMarkerPose" />
+        <!--		<param name="altitudeTopic" type="string" value="/vehicle/altitude" />-->
+        <param name="updateRate" type="double" value="0.6" />
+        <param name="rangeOn" type="bool" value="false" />
+        <param name="rangeMin" type="double" value="0.5" />
+        <param name="rangeMax" type="double" value="4.0" />
+        <param name="positionOn" type="bool" value="false" />
+        <param name="positionToll" type="double" value="1.0" />
+        <param name="orientationOn" type="bool" value="false" />
+        <param name="orientationTollDeg" type="double" value="20.0" />
+        <param name="observerZOn" type="bool" value="false" />
+        <param name="markerRadius" type="double" value="0.05" />
+        <param name="markerLength" type="double" value="1.00" />
+        <param name="frameId" type="string" value="/freefloating" />
+    </node>
+	
+</launch>

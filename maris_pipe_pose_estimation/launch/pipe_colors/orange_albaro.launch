@@ -1,0 +1,9 @@
+<launch>
+<param name="PipePoseEstimationNode/minH" value="0"/>
+<param name="PipePoseEstimationNode/minS" value="15"/>
+<param name="PipePoseEstimationNode/minV" value="35"/>
+
+<param name="PipePoseEstimationNode/maxH" value="10"/>
+<param name="PipePoseEstimationNode/maxS" value="255"/>
+<param name="PipePoseEstimationNode/maxV" value="255"/>
+</launch>

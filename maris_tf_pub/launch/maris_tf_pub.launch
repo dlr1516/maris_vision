@@ -1,0 +1,86 @@
+
+<launch>
+	
+	<param name="use_sim_time" value="true" />
+	<env name="ROS_HOSTNAME" value="192.168.0.21" />
+	<!--<node name="cTo_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/vision/cTo" />
+		<param name="tf_parent_frame"	value="vision" />
+		<param name="tf_child_frame"	value="object" />
+	</node>-->
+	<node name="vTc_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/vision/vTc" />
+		<param name="tf_parent_frame"	value="vehicle" />
+		<param name="tf_child_frame"	value="vision" />
+	</node>
+<!--	<node name="cTl_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/vision/cTl" />
+		<param name="tf_parent_frame"	value="vision" />
+		<param name="tf_child_frame"	value="lato" />
+	</node>
+        <env name="ROS_HOSTNAME" value="192.168.0.21" /> -->
+	<node name="vTg_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/freefloating/vTg" />
+		<param name="tf_parent_frame"	value="vehicle" />
+		<param name="tf_child_frame"	value="goal" />
+	</node>
+	<node name="wTv_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/vehicle/wTv/wTv" />
+		<param name="tf_parent_frame"	value="world" />
+		<param name="tf_child_frame"	value="vehicle" />
+	</node>
+	<node name="vTe_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/vTe" />
+		<param name="tf_parent_frame"	value="vehicle" />
+		<param name="tf_child_frame"	value="end_effector" />
+	</node>
+	<node name="eTt_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/eTt" />
+		<param name="tf_parent_frame"	value="end_effector" />
+		<param name="tf_child_frame"	value="tool" />
+	</node>
+	
+	
+	<node name="vTb_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/vTb" />
+		<param name="tf_parent_frame"	value="vehicle" />
+		<param name="tf_child_frame"	value="base" />
+	</node>
+	<node name="bT1_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT1" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint1" />
+	</node>
+	<node name="bT2_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT2" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint2" />
+	</node>
+	<node name="bT3_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT3" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint3" />
+	</node>
+	<node name="bT4_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT4" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint4" />
+	</node>
+	<node name="bT5_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT5" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint5" />
+	</node>
+	<node name="bT6_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT6" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint6" />
+	</node>
+	<node name="bT7_TF_pub" pkg="maris_tf_pub" type="maris_tf_pub" output="screen">
+		<param name="trans_mat_topic"	value="/arm/bT7" />
+		<param name="tf_parent_frame"	value="base" />
+		<param name="tf_child_frame"	value="joint7" />
+	</node>
+<!--	<node name="pool_tf" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 2.79 pool world 100" />
+	<node name="depth_tf" pkg="tf" type="static_transform_publisher" args="0 0 -3.5 0 0 0 depth pool 100" />-->
+</launch>

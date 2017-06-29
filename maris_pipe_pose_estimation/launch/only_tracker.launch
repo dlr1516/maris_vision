@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <env name="ROS_HOSTNAME" value="192.168.0.34" />
+
+    <node name="frame_tracker_vTg" pkg="maris_pipe_pose_estimation" type="frame_tracker_node" output="screen">
+        <param name="worldToObserverTopic" type="string" value="/vehicle/wTv" />
+        <param name="observerToTargetInTopic" type="string" value="/vision/vTgRaw" />
+        <param name="observerToTargetLineInTopic" type="string" value="/vision/vLg" />
+        <param name="observerToTargetOutTopic" type="string" value="/freefloating/vTg" />
+        <param name="markerOutTopic" type="string" value="/vision/vTgMarkerPipe" />
+        <param name="poseOutTopic" type="string" value="/vision/vTgMarkerPose" />
+        <!--		<param name="altitudeTopic" type="string" value="/vehicle/altitude" />-->
+        <param name="updateRate" type="double" value="0.6" />
+        <param name="rangeOn" type="bool" value="true" />
+        <param name="rangeMin" type="double" value="2.0" />
+        <param name="rangeMax" type="double" value="3.0" />
+        <param name="positionOn" type="bool" value="true" />
+        <param name="positionToll" type="double" value="0.5" />
+        <param name="orientationOn" type="bool" value="true" />
+        <param name="orientationTollDeg" type="double" value="20.0" />
+        <param name="observerZOn" type="bool" value="true" />
+        <param name="markerRadius" type="double" value="0.05" />
+        <param name="markerLength" type="double" value="1.00" />
+        <param name="frameId" type="string" value="/freefloating" />
+    </node>
+        
+    <node name="frame_tracker_cTo" pkg="maris_pipe_pose_estimation" type="frame_tracker_node" output="screen">
+        <param name="worldToObserverTopic" type="string" value="/vehicle/wTv" />
+        <param name="observerToTargetInTopic" type="string" value="/vision/cTlRaw" />
+        <param name="observerToTargetLineInTopic" type="string" value="/vision/cLl" />
+        <param name="observerToTargetOutTopic" type="string" value="/vision/cTl" />
+        <param name="markerOutTopic" type="string" value="/vision/cTlMarkerPipe" />
+        <param name="poseOutTopic" type="string" value="/vision/cTlMarkerPose" />
+        <!--		<param name="altitudeTopic" type="string" value="/vehicle/altitude" />-->
+        <param name="updateRate" type="double" value="0.6" />
+        <param name="rangeOn" type="bool" value="false" />
+        <param name="rangeMin" type="double" value="0.5" />
+        <param name="rangeMax" type="double" value="4.0" />
+        <param name="positionOn" type="bool" value="true" />
+        <param name="positionToll" type="double" value="1.0" />
+        <param name="orientationOn" type="bool" value="true" />
+        <param name="orientationTollDeg" type="double" value="20.0" />
+        <param name="observerZOn" type="bool" value="true" />
+        <param name="markerRadius" type="double" value="0.05" />
+	<param name="markerLength" type="double" value="1.00" />
+        <param name="frameId" type="string" value="/freefloating" />
+    </node>
+	
+</launch>
