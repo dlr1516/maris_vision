@@ -30,6 +30,20 @@ If you use this library, please cite one of the following papers:
       doi = {10.1016/j.compeleceng.2016.08.023},
       note = {DOI 10.1016/j.compeleceng.2016.08.023, EID 2-s2.0-84994797689},
     }
+
+    @article{simetti2018joe,
+      author={Simetti, E. and Wanderlingh, F. and Torelli, S. and Bibuli, M. and Odetti, A. and Bruzzone, G. and Lodi Rizzini, D. and Aleotti, J. and Palli, G. and Moriello, L. and Scarcia, U.},
+      title={{Autonomous Underwater Intervention: Experimental Results of the MARIS Project}}
+      journal={IEEE Journal of Oceanic Engineering (JOE)},
+      volume={43},
+      number={3},
+      pages={620--639},
+      month={July},
+      year={2018},
+      issn = {0364-9059},
+      doi = {10.1109/JOE.2017.2733878},
+      note = {DOI 10.1109/JOE.2017.2733878},
+    }
     
     @article{lodirizzini2015ijars,
       author = {Lodi Rizzini, D. and Kallasi, F. and Oleari, F. and Caselli, S.},
@@ -47,7 +61,7 @@ If you use this library, please cite one of the following papers:
 ```    
 
 or the most relevant associated publications by visiting: 
-http://rimlab.ce.unipr.it/FALKOLib.html
+http://rimlab.ce.unipr.it/Maris.php
 
 
 DEPENDENCIES
